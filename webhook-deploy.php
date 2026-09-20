@@ -2,7 +2,7 @@
 // Basit dağıtım webhook'u - GitHub Actions tarafından push sonrası çağrılır.
 // Gizli anahtarı doğrular, gönderilen zip'i bu dosyanın bulunduğu klasöre (public_html) açar.
 
-$secret = 'e3661ab4a5f55f69cb142e4ffabf2ae4ef4aad04';
+$secret = '7e2c98e80251fe6610caf9fd08de4ef8cf6088ef';
 
 header('Content-Type: text/plain; charset=utf-8');
 
