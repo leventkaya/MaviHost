@@ -5,22 +5,21 @@ on:
     branches: [ main ]
 
 jobs:
-  ftp-deploy:
+  cpanel-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Git pull tetikle (cPanel)
+        run: |
+          echo "--- PULL ---"
+          curl -sS -w "\nHTTP_STATUS:%{http_code}\n" \
+            "https://${{ secrets.CPANEL_HOST }}:2083/execute/VersionControl/update" \
+            -H "Authorization: cpanel ${{ secrets.CPANEL_USER }}:${{ secrets.CPANEL_TOKEN }}" \
+            --data-urlencode "repository_root=/home/uzayka/repositories/MaviHost_ses"
 
-      - name: FTP ile public_html'e gönder
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./
-          server-dir: ./public_html/
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/.github/**
-            **/.cpanel.yml
+      - name: Dağıtımı tetikle (.cpanel.yml)
+        run: |
+          echo "--- DEPLOY ---"
+          curl -sS -w "\nHTTP_STATUS:%{http_code}\n" \
+            "https://${{ secrets.CPANEL_HOST }}:2083/execute/VersionControlDeployment/create" \
+            -H "Authorization: cpanel ${{ secrets.CPANEL_USER }}:${{ secrets.CPANEL_TOKEN }}" \
+            --data-urlencode "repository_root=/home/uzayka/repositories/MaviHost_ses"
